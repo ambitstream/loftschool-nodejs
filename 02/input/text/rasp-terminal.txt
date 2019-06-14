@@ -1,0 +1,32 @@
+MacBook-Pro-holyan:~ holyan$ ssh 192.168.1.108 -l pi
+pi@192.168.1.108's password: 
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+pi@raspbmc:~$ sudo echo "install ipv6 /bin/true" >> /etc/modprobe.d/blacklist.conf
+-bash: /etc/modprobe.d/blacklist.conf: Permission denied
+pi@raspbmc:~$ sudo -s 
+root@raspbmc:/home/pi#  echo "install ipv6 /bin/true" >> /etc/modprobe.d/blacklist.conf
+root@raspbmc:/home/pi# less /etc/mo
+modprobe.d/ modules     motd        
+root@raspbmc:/home/pi# less /etc/mo
+modprobe.d/ modules     motd        
+root@raspbmc:/home/pi# less /etc/modprobe.d/blacklist.conf 
+root@raspbmc:/home/pi# xb
+xbmc             xbmc-standalone  xboxdrv          xboxdrvctl
+root@raspbmc:/home/pi# xb
+xbmc             xbmc-standalone  xboxdrv          xboxdrvctl
+root@raspbmc:/home/pi# xbmc
+xbmc             xbmc-standalone  
+root@raspbmc:/home/pi# xbmc start
+sh: 1: glxinfo: not found
+XBMC needs hardware accelerated OpenGL rendering.
+Install an appropriate graphics driver.
+
+Please consult XBMC Wiki for supported hardware
+http://wiki.xbmc.org/?title=Supported_hardware
+root@raspbmc:/home/pi# 

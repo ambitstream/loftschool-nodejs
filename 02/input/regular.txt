@@ -1,0 +1,9 @@
+
+Find
+transition-delay:(.+)
+
+Replace
+$0
+-ma-$0
+-moz-$0
+-webkit-$0
