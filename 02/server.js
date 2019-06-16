@@ -6,10 +6,14 @@ const config = {
 const delay = ms => new Promise((r, j) => setTimeout(r, ms))
 const getUtcDateNow = () => ( new Date() ).toUTCString()
 
-const runFor = async (time, interval, func, endFunc) => {
-  while (time > Date.now()) {
-    await delay(interval)
-    func()
+const runFor = async (expiresAt, interval, func, endFunc) => {
+  while (expiresAt > Date.now()) {
+    try {
+      func()
+      await delay(interval)
+    } catch (e) {
+      console.log(e)
+    }
   }
   endFunc()
 };
