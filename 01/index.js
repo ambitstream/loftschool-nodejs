@@ -6,30 +6,50 @@ const input = argv.i || argv.input || 'input'
 const output = argv.o || argv.output || 'output'
 const deleteInput = argv._.some(i => i === 'deleteInput')
 
-if (!fs.existsSync(output)) {
-  fs.mkdirSync(output)
+fs.access(output, err => {
+  if (err) {
+    fs.mkdir(output, err => {
+      if (err) console.log(err);
+    })
+  }
+})
+
+const copyFile = (copyFrom, copyTo) => {
+  fs.access(copyTo, err => {
+    if (err) {
+      fs.link(copyFrom, copyTo, (err) => {
+        if (err) console.log(err);
+      })
+    }
+  })
 }
 
 const readDir = base => {
-  const files = fs.readdirSync(base)
+  fs.readdir(base, (err, files) => {
+    if (err) console.log(err);
 
-  files.forEach((item, i) => {
-    const itemBase = path.join(base, item)
-    const state = fs.statSync(itemBase)
-    if (state.isDirectory()) {
-      readDir(itemBase)
-    } else {
-      const newDir = path.join(output, item[0].toUpperCase())
-      const newItemBase = path.join(newDir, item)
-      if (!fs.existsSync(newDir)) {
-        fs.mkdirSync(newDir)
-      }
-      if (!fs.existsSync(newItemBase)) {
-        fs.link(itemBase, newItemBase, (err) => {
-          if (err) console.log(err)
-        })
-      }
-    }
+    files.forEach((item, i) => {
+      const itemBase = path.join(base, item)
+      fs.stat(itemBase, (err, state) => {
+        if (err) console.log(err);
+        if (state.isDirectory()) {
+          readDir(itemBase)
+        } else {
+          const newDir = path.join(output, item[0].toUpperCase())
+          const newItemBase = path.join(newDir, item)
+          fs.access(newDir, err => {
+            if (err) {
+              fs.mkdir(newDir, (err) => {
+                if (err) console.log(err)
+                copyFile(itemBase, newItemBase)
+              })
+            } else {
+              copyFile(itemBase, newItemBase)
+            }
+          })
+        }
+      })
+    })
   })
 }
 
