@@ -1,10 +1,10 @@
-const http = require('http');
+const http = require('http')
 const config = {
   interval: Number(process.env.INTERVAL) || 1,
-  liveTime: Number(process.env.LIVETIME) || 5,
+  liveTime: Number(process.env.LIVETIME) || 5
 }
-const delay = ms => new Promise((r, j) => setTimeout(r, ms))
-const getUtcDateNow = () => ( new Date() ).toUTCString()
+const delay = ms => new Promise((resolve, reject) => setTimeout(resolve, ms))
+const getUtcDateNow = () => (new Date()).toUTCString()
 
 const runFor = async (expiresAt, interval, func, endFunc) => {
   while (expiresAt > Date.now()) {
@@ -16,21 +16,21 @@ const runFor = async (expiresAt, interval, func, endFunc) => {
     }
   }
   endFunc()
-};
+}
 
-const server = http.createServer( (req, res) => {
+const server = http.createServer((req, res) => {
   if (req.method === 'GET') {
-    const killTimeMs = Date.now() + (config.liveTime * 1000);
-    const intervalMs = config.interval * 1000;
+    const killTimeMs = Date.now() + (config.liveTime * 1000)
+    const intervalMs = config.interval * 1000
 
     runFor(
       killTimeMs,
       intervalMs,
-      () => console.log( getUtcDateNow() ),
+      () => console.log(getUtcDateNow()),
       () => {
         console.log(`FINISHED AT ${getUtcDateNow()}`)
-        process.exit()
         res.end()
+        process.exit()
       }
     )
   }

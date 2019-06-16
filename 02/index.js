@@ -19,7 +19,7 @@ const copyFile = async (from, to) => {
   } catch (e) {
     try {
       await link(from, to)
-      console.log(`Copied '${from}' to '${to}'`);
+      console.log(`Copied '${from}' to '${to}'`)
     } catch (e) {
       console.log(e)
     }
@@ -58,7 +58,7 @@ const readDir = async base => {
     for (let i = 0; i < files.length; i++) {
       await cb(files[i])
     }
-  } catch(e) {
+  } catch (e) {
     console.log(e)
   }
 }
@@ -86,7 +86,7 @@ const init = async () => {
       process.exit(1)
     }
   }
-  return new Promise( async (resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       await readDir(input)
       resolve()
@@ -101,7 +101,7 @@ init().then(async () => {
   console.log('===========')
   console.log('Success END')
   process.exit()
-}).catch( e => {
+}).catch(e => {
   console.log(e)
   process.exit(1)
 })
