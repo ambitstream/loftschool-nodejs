@@ -1,6 +1,5 @@
 exports.auth = ({email, password}) => new Promise(async (resolve, reject) => {
   try {
-    console.log(email, password);
     if (!email || !password) {
       reject('Email and password are required')
       return

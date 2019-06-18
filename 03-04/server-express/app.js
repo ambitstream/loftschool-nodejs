@@ -29,6 +29,12 @@ app.use(session({
 app.use(flash())
 app.use(express.static('./public'))
 
+const getMessageHelper = (req, key) => {
+  const messages = req.flash(key)
+  const msgslogin = typeof messages === 'object' && messages.length ? messages[0] : null
+  return msgslogin
+}
+
 app.get('/', async (req, res) => {
   try {
     const products = await productsController.get()
@@ -46,6 +52,8 @@ app.get('/admin', async (req, res) => {
     if (req.session.isAuth) {
       const skills = await skillsController.get()
       res.render('admin', {
+        msgfile: getMessageHelper(req, 'msgfile'),
+        msgskill: getMessageHelper(req, 'msgskill'),
         skills
       })
     } else {
@@ -65,6 +73,8 @@ app.post('/admin/upload', async (req, res) => {
     })
   } catch (e) {
     console.error(e)
+    req.flash('msgfile', e)
+    res.redirect('/admin')
   }
 })
 app.post('/admin/skills', async (req, res) => {
@@ -76,14 +86,14 @@ app.post('/admin/skills', async (req, res) => {
     })
   } catch (e) {
     console.error(e)
+    req.flash('msgskill', e)
+    res.redirect('/admin')
   }
 })
 app.get('/login', async (req, res) => {
   try {
-    const messages = req.flash('msgslogin')
-    const msgslogin = typeof messages === 'object' && messages.length ? messages[0] : null
     res.render('login', {
-      msgslogin
+      msgslogin: getMessageHelper(req, 'msgslogin')
     })
   } catch (e) {
     console.log(e)
@@ -93,8 +103,6 @@ app.post('/login', async (req, res) => {
   try {
     await authController.auth(req.body)
     req.session.isAuth = true
-    console.log('post')
-    console.log(req.session)
     res.redirect('/admin')
   } catch (e) {
     console.log(e)
