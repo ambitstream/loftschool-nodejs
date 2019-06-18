@@ -13,13 +13,9 @@ const productFilePath = path.join(__dirname, '../fixtures/products.json')
 exports.get = () => new Promise(async (resolve, reject) => {
   try {
     let products = []
-    try {
-      await access(productFilePath)
-      const fileContent = await readFile(productFilePath, 'utf-8')
-      products = JSON.parse(fileContent)
-    } catch (e) {
-      console.log(e)
-    }
+    await access(productFilePath)
+    const fileContent = await readFile(productFilePath, 'utf-8')
+    products = JSON.parse(fileContent)
     resolve(products)
   } catch (e) {
     reject(e)
@@ -34,21 +30,7 @@ exports.add = ({photo, name, price}) => new Promise(async (resolve, reject) => {
     try {
       await access(uploadDir)
     } catch (e) {
-      try {
-        await mkdir(uploadDir)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-    try {
-      await access(uploadDir)
-    } catch (e) {
-      try {
-        await mkdir(uploadDir)
-      } catch (e) {
-        console.log(e)
-      }
+      await mkdir(uploadDir)
     }
 
     if (!name || !price) {
@@ -80,12 +62,8 @@ exports.add = ({photo, name, price}) => new Promise(async (resolve, reject) => {
     let products = []
     try {
       await access(productFilePath)
-      try {
-        const fileContent = await readFile(productFilePath, 'utf-8')
-        products = JSON.parse(fileContent)
-      } catch (e) {
-        console.log(e)
-      }
+      const fileContent = await readFile(productFilePath, 'utf-8')
+      products = JSON.parse(fileContent)
     } catch (e) {
       console.log(e)
     }
