@@ -7,6 +7,7 @@ const flash = require('express-flash')
 const productsController = require('./controllers/products.js')
 const skillsController = require('./controllers/skills.js')
 const authController = require('./controllers/auth.js')
+const mailController = require('./controllers/mail.js')
 const app = express()
 
 app.set('views', './views/pages')
@@ -34,17 +35,27 @@ const getMessageHelper = (req, key) => {
   const msgslogin = typeof messages === 'object' && messages.length ? messages[0] : null
   return msgslogin
 }
-
 app.get('/', async (req, res) => {
   try {
     const products = await productsController.get()
     const skills = await skillsController.get()
     res.render('index', {
+      msgsemail: getMessageHelper(req, 'msgsemail'),
       products,
       skills
     })
   } catch (e) {
     console.error(e)
+  }
+})
+app.post('/', async (req, res) => {
+  try {
+    const result = await mailController.send(req.body)
+    req.flash('msgsemail', result.message)
+    res.redirect('/')
+  } catch (e) {
+    req.flash('msgsemail', e.message)
+    res.redirect('/')
   }
 })
 app.get('/admin', async (req, res) => {
@@ -108,7 +119,6 @@ app.post('/login', async (req, res) => {
     res.redirect('/login')
   }
 })
-
 app.use((err, req, res, next) => {
   console.error(err.stack)
   res.send('Server error')
