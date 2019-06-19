@@ -22,7 +22,7 @@ exports.get = () => new Promise(async (resolve, reject) => {
   }
 })
 
-exports.add = ({photo, name, price}) => new Promise(async (resolve, reject) => {
+exports.add = ({ photo, name, price }) => new Promise(async (resolve, reject) => {
   try {
     const { name: photoName, size, tempFilePath } = photo
     const uploadDir = path.join(process.cwd(), '/public', 'assets', 'img', 'products')
@@ -36,7 +36,7 @@ exports.add = ({photo, name, price}) => new Promise(async (resolve, reject) => {
     if (!name || !price) {
       try {
         await unlink(tempFilePath)
-        reject('All fields are required')
+        reject(new Error('All fields are required'))
       } catch (e) {
         console.log(e)
       }
@@ -46,7 +46,7 @@ exports.add = ({photo, name, price}) => new Promise(async (resolve, reject) => {
     if (!photoName || !size) {
       try {
         await unlink(tempFilePath)
-        reject('File not saved')
+        reject(new Error('File not saved'))
       } catch (e) {
         console.log(e)
       }
@@ -70,9 +70,9 @@ exports.add = ({photo, name, price}) => new Promise(async (resolve, reject) => {
 
     let newProducts = products.slice()
     newProducts.push({
-      "src": "./assets/img/products/" + photoName,
-      "name": name,
-      "price": price
+      'src': './assets/img/products/' + photoName,
+      'name': name,
+      'price': price
     })
 
     try {

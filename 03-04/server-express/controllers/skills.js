@@ -18,10 +18,10 @@ exports.get = () => new Promise(async (resolve, reject) => {
     reject(e)
   }
 })
-exports.add = ({age, concerts, cities, years}) => new Promise(async (resolve, reject) => {
+exports.add = ({ age, concerts, cities, years }) => new Promise(async (resolve, reject) => {
   try {
     if (!age || !concerts || !cities || !years) {
-      reject('All fields are required')
+      reject(new Error('All fields are required'))
       return
     }
     await access(skillsFilePath)

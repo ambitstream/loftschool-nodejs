@@ -1,12 +1,11 @@
-exports.auth = ({email, password}) => new Promise(async (resolve, reject) => {
+exports.auth = ({ email, password }) => new Promise(async (resolve, reject) => {
   try {
     if (!email || !password) {
-      reject('Email and password are required')
+      reject(new Error('Email and password are required'))
       return
     }
-
     if (email !== 'admin@admin.com' || password !== 'admin') {
-      reject('Incorrect credemtials')
+      reject(new Error('Incorrect credemtials'))
       return
     }
     resolve(true)

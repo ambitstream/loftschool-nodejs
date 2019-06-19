@@ -11,7 +11,7 @@ const app = express()
 
 app.set('views', './views/pages')
 app.set('view engine', 'pug')
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(fileUpload({
   useTempFiles: true,
@@ -23,7 +23,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-      expires: 600000
+    expires: 600000
   }
 }))
 app.use(flash())
@@ -59,21 +59,20 @@ app.get('/admin', async (req, res) => {
     } else {
       res.redirect('/login')
     }
-
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 })
 app.post('/admin/upload', async (req, res) => {
   try {
     const skills = await skillsController.get()
-    await productsController.add({...req.files, ...req.body})
+    await productsController.add({ ...req.files, ...req.body })
     res.render('admin', {
       skills
     })
   } catch (e) {
     console.error(e)
-    req.flash('msgfile', e)
+    req.flash('msgfile', e.message)
     res.redirect('/admin')
   }
 })
@@ -86,7 +85,7 @@ app.post('/admin/skills', async (req, res) => {
     })
   } catch (e) {
     console.error(e)
-    req.flash('msgskill', e)
+    req.flash('msgskill', e.message)
     res.redirect('/admin')
   }
 })
@@ -105,9 +104,8 @@ app.post('/login', async (req, res) => {
     req.session.isAuth = true
     res.redirect('/admin')
   } catch (e) {
-    console.log(e)
-    req.flash('msgslogin', e)
-    res.redirect('/login');
+    req.flash('msgslogin', e.message)
+    res.redirect('/login')
   }
 })
 
