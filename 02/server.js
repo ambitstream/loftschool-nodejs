@@ -19,6 +19,7 @@ const runFor = async (expiresAt, interval, func, endFunc) => {
 }
 
 const server = http.createServer((req, res) => {
+  res.writeHead(200, {'Content-Type': 'text/html'})
   if (req.method === 'GET') {
     const killTimeMs = Date.now() + (config.liveTime * 1000)
     const intervalMs = config.interval * 1000
@@ -28,7 +29,7 @@ const server = http.createServer((req, res) => {
       intervalMs,
       () => console.log(getUtcDateNow()),
       () => {
-        console.log(`FINISHED AT ${getUtcDateNow()}`)
+        res.end(`<h4>FINISHED AT ${getUtcDateNow()}</h4>`)
         res.end()
         process.exit()
       }
