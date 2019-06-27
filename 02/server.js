@@ -30,7 +30,6 @@ const server = http.createServer((req, res) => {
       () => console.log(getUtcDateNow()),
       () => {
         res.end(`<h4>FINISHED AT ${getUtcDateNow()}</h4>`)
-        res.end()
         process.exit()
       }
     )
